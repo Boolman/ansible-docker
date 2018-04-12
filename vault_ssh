@@ -1,0 +1,12 @@
+#!/bin/bash
+host="${@:(-2):1}"
+cmd="${@: -1}"
+while [ $# -ge 1 ]; do
+  param=$1 && shift
+  case $param in
+    User*)
+      user=$(echo $param | cut -d "=" -f2)
+      ;;
+  esac
+done
+/vault ssh -strict-host-key-checking=no -role=otp_key_role -mode=otp $user@$host $cmd
