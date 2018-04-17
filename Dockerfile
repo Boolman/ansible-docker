@@ -42,7 +42,7 @@ RUN /bin/chmod 755 /vault && \
     /bin/chmod 755 /vault_ssh
 
 RUN sed -i 's/#remote_user.*/remote_user = ubuntu/g' /etc/ansible/ansible.cfg && \
-    sed -i '/\[ssh_connection\]/a ssh_executable = \/vault\nssh_args = ""' /etc/ansible/ansible.cfg
+    sed -i '/\[ssh_connection\]/a ssh_executable = \/vault_ssh\nssh_args = ""' /etc/ansible/ansible.cfg
 
 # default command: display Ansible version
 CMD [ "ansible-playbook", "--version" ]
