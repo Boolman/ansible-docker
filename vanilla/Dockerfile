@@ -26,6 +26,7 @@ RUN echo "===> Adding Ansible's PPA..."  && \
     apt-get install -y python-pip              && \
     pip install --upgrade pywinrm              && \
     apt-get install -y sshpass openssh-client  && \
+    apt-get install -y python-netaddr && \
     \
     \
     echo "===> Removing Ansible PPA..."  && \
@@ -35,14 +36,9 @@ RUN echo "===> Adding Ansible's PPA..."  && \
     echo "===> Adding hosts for convenience..."  && \
     echo 'localhost' > /etc/ansible/hosts
 
-COPY vault /vault
-COPY vault_ssh /vault_ssh
-
-RUN /bin/chmod 755 /vault && \
-    /bin/chmod 755 /vault_ssh
-
 RUN sed -i 's/#remote_user.*/remote_user = ubuntu/g' /etc/ansible/ansible.cfg && \
-    sed -i '/\[ssh_connection\]/a ssh_executable = \/vault_ssh\nssh_args = ""' /etc/ansible/ansible.cfg
+    sed -i 's/#host_key_checking.*/host_key_checking = False/g' /etc/ansible/ansible.cfg && \
+    sed -i 's/#ssh_args.*/ssh_args = -o ControlMaster=auto -o ControlPersist=60s -o UserKnownHostsFile=\/dev\/null/g' /etc/ansible/ansible.cfg
 
 # default command: display Ansible version
 CMD [ "ansible-playbook", "--version" ]
