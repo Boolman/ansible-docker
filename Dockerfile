@@ -14,8 +14,7 @@ RUN echo "===> Adding Ansible's PPA..."  && \
     DEBIAN_FRONTEND=noninteractive  && \
     apt-get update && apt-get install -y software-properties-common && \
     add-apt-repository -y ppa:ansible/ansible && \
-    apt-get update  && apt-get -y install ubuntu-keyring  && \
-    apt-key list && \
+    apt-get update  && \ 
     \
     \
     echo "===> Installing Ansible..."  && \
