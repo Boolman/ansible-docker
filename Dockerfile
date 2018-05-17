@@ -39,12 +39,15 @@ RUN echo "===> Adding Ansible's PPA..."  && \
 
 COPY --from=vault /bin/vault /vault
 COPY vault_ssh /vault_ssh
+COPY ansible-vault-env /usr/local/bin/ansible-vault-env
 
 RUN /bin/chmod 755 /vault && \
-    /bin/chmod 755 /vault_ssh
+    /bin/chmod 755 /vault_ssh && \
+    /bin/chmod 755 /usr/local/bin/ansible-vault-env
 
 RUN sed -i 's/#remote_user.*/remote_user = ubuntu/g' /etc/ansible/ansible.cfg && \
-    sed -i '/\[ssh_connection\]/a ssh_executable = \/vault_ssh\nssh_args = ""' /etc/ansible/ansible.cfg
+    sed -i '/\[ssh_connection\]/a ssh_executable = \/vault_ssh\nssh_args = ""' /etc/ansible/ansible.cfg && \
+    sed -i 's/#vault_password_file.*/vault_password_file = \/usr\/local\/bin\/ansible-vault-env/g' /etc/ansible/ansible.cfg
 
 # default command: display Ansible version
 CMD [ "ansible-playbook", "--version" ]
