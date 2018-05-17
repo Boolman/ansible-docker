@@ -5,6 +5,9 @@
 # Version  1.0
 #
 
+FROM vault:0.10.1 as vault
+
+
 # pull base image
 FROM ubuntu:16.04
 
@@ -34,7 +37,7 @@ RUN echo "===> Adding Ansible's PPA..."  && \
     echo "===> Adding hosts for convenience..."  && \
     echo 'localhost' > /etc/ansible/hosts
 
-COPY vault /vault
+COPY --from=vault /bin/vault /vault
 COPY vault_ssh /vault_ssh
 
 RUN /bin/chmod 755 /vault && \
